@@ -1,0 +1,1011 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=1200, initial-scale=1.2">
+    <meta charset="utf-8" />
+    <title>Azur Lane</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js" integrity="sha384-pjaaA8dDz/5BgdFUPX6M/9SUZv4d12SUPF0axWc+VRZkx5xU3daN+lYb49+Ax+Tl" crossorigin="anonymous"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+   
+    <script src="https://cdn.jsdelivr.net/npm/object-hash@1.3.1/dist/object_hash.min.js"></script>
+    
+    <link href="style/aldb.min.css" rel="stylesheet" />
+    <script src="script/aldb.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+
+    <link rel="stylesheet" href="style/stitches-0.1.2-min.css">
+    <script data-main="js/stitches.js" src="script/stitches-0.1.2-min.js"></script>
+
+    <!-- <link rel="stylesheet" href="style/stylesheet.css"> -->
+
+    <script>
+        $(document).ready(function () {
+            initAldb();
+        });
+    </script>
+</head>
+<body>
+    <!-- Ship select modal -->
+    <div class="modal fade" id="modalPickShip" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Select Ship</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="search-cont">
+                        <input class="tip-search" />
+                        <div class="filter-group" filter-type="nation">
+                            <div class="group-desc">Faction </div>
+                            <div class="filter-btn fil-off" filter="2" state="off">IJN</div>
+                            <div class="filter-btn fil-off" filter="4" state="off">USS</div>
+                            <div class="filter-btn fil-off" filter="8" state="off">HMS</div>
+                            <div class="filter-btn fil-off" filter="16" state="off">KMS</div>
+                            <div class="filter-btn fil-off" filter="32" state="off">ROC</div>
+                            <div class="filter-btn fil-off" filter="128" state="off">FFNF</div>
+                        </div>
+                        <div class="filter-group" filter-type="stype">
+                            <div class="group-desc">Class </div>
+                            <div class="filter-btn fil-off" filter="4" state="off">BB</div>
+                            <div class="filter-btn fil-off" filter="8" state="off">BC</div>
+                            <div class="filter-btn fil-off" filter="1" state="off">CV</div>
+                            <div class="filter-btn fil-off" filter="2" state="off">CVL</div>
+                            <div class="filter-btn fil-off" filter="64" state="off">AR</div>
+                            <div class="filter-btn fil-off" filter="128" state="off">DD</div>
+                            <div class="filter-btn fil-off" filter="256" state="off">CL</div>
+                            <div class="filter-btn fil-off" filter="512" state="off">CA</div>
+                        </div>
+                        <div class="filter-group" filter-type="rarity">
+                            <div class="group-desc">Rarity </div>
+                            <div class="filter-btn fil-off" filter="1" state="off">N</div>
+                            <div class="filter-btn fil-off" filter="2" state="off">R</div>
+                            <div class="filter-btn fil-off" filter="4" state="off">SR</div>
+                            <div class="filter-btn fil-off" filter="8" state="off">SSR</div>
+                            <div class="filter-btn fil-off" filter="16" state="off">UR</div>
+                            <div class="filter-btn fil-off" filter="32" state="off">PR</div>
+                            <!-- <div class="filter-btn">改</div> -->
+                        </div>
+                    </div>
+                    <div class="ship-list" type="backline" slot="6"></div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary disabled">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Equip select modal -->
+    <div class="modal fade" id="modalPickEquip" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="equipModalTitle">Select Equip</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="search-cont">
+                        <input class="tip-search" />
+                        <div class="filter-group" filter-type="nation">
+                            <div class="group-desc">Faction </div>
+                            <div class="filter-btn fil-off" filter="2" state="off">IJN</div> <!--<img height="20" src="img/stars/3.png">-->
+                            <div class="filter-btn fil-off" filter="4" state="off">USS</div>
+                            <div class="filter-btn fil-off" filter="8" state="off">HMS</div>
+                            <div class="filter-btn fil-off" filter="16" state="off">KMS</div>
+                            <div class="filter-btn fil-off" filter="32" state="off">ROC</div>
+                            <div class="filter-btn fil-off" filter="128" state="off">FFNF</div>
+                        </div>
+                        <div class="filter-group" filter-type="rarity">
+                            <div class="group-desc">Rarity </div>
+                            <div class="filter-btn fil-off" filter="1" state="off">N</div>
+                            <div class="filter-btn fil-off" filter="2" state="off">R</div>
+                            <div class="filter-btn fil-off" filter="4" state="off">SR</div>
+                            <div class="filter-btn fil-off" filter="8" state="off">SSR</div>
+                            <div class="filter-btn fil-off" filter="16" state="off">UR</div>
+                            <div class="filter-btn fil-off" filter="32" state="off">PR</div>
+                            <!-- <div class="filter-btn">改</div> -->
+                        </div>
+                    </div>
+                    <div class="equip-list" type="backline" slot="6"></div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary disabled">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About the fixed gun modal -->
+    <div class="modal fade" id="modalFixedSecondary" tabindex="-1" role="dialog" aria-labelledby="fixedGunModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="fixedGunModalTitle">About the fixed gun</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="padding:25px;">
+                    <p><b>Cruisers that equip torpedoes</b> have an additional gun that is not visible in the equipment list and cannot be changed. 
+                    This gun is generally weak and the slot has very low efficiency. However, the gun is fast and has a 360 degrees angle of attack.</p>
+
+                    <p>This gun gets small improvements from limit breaks and its properties are mostly dependent on the nation of the ship.</p>
+
+                    <!--<p>It is assumed that the purpose of this gun is to somewhat help cover the big weaknesses of having a torpedo secondary: limited angle of attack and high cooldowns.</p>
+                    -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skills modal -->
+    <div class="modal fade" id="modalSkillList" tabindex="-1" role="dialog" aria-labelledby="skillListModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="skillListModalTitle">Skill list</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="padding:25px;">
+                    <div class="skill-entry" data-sidx="0">
+                        <div class="custom-control custom-checkbox" style="margin-left:10px;">
+                            <input type="checkbox" class="custom-control-input checkSkillEnabled" id="checkSkillEnabled" name="checkSkillEnabled">
+                            <label class="custom-control-label unselectable" for="checkSkillEnabled">Active</label>
+                        </div>
+                        <div class="stacks-modes">
+                            <div>Stacks:</div>
+                            <select class="sel-skill-stacks">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>10</option>
+                            </select>
+                            <select class="sel-skill-mode">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>10</option>
+                            </select>
+                        </div>
+                        <div>
+                            <select class="sel-skill-level">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>10</option>
+                            </select>
+                        </div>
+                        <div class="skill-entry-icon">
+                            <img width="65" src="img/skills/10030.png" />
+                        </div>                                             
+                        <div class="skill-entry-desc">
+                            <div class="skill-desc-title"></div>
+                            <div class="skill-desc-text">戦闘中、前衛艦隊で自身が最後の一隻になった時、与えるダメージが$1、受けるダメージが$2アップする。</div>                       
+                        </div>
+                    </div>
+                    <hr class="my-2" />
+                    <div class="skill-entry">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enemies modal -->
+    <div class="modal fade" id="modalEnemies" tabindex="-1" role="dialog" aria-labelledby="enemyListModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="enemyListModalTitle">Choose target</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="padding:25px;">
+                    <div>
+                        Map: <select id="selMap"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option>
+                                 <option>7</option>
+                                 <option>8</option>
+                                 <option>9</option>
+                                 <option>10</option>
+                                 <option>11</option>
+                                 <option>12</option></select>
+                        Chapter: <select id="selChapter"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select>                     
+                        <button id="btnSearchEnemies" type="button" class="btn btn-primary" aria-label="Search">
+                            <span aria-hidden="true">Search</span>
+                        </button>
+                    </div>
+                    <div id="contEnemyLst" style="display:flex; align-content:space-between; justify-content:space-between; padding:5px; flex-direction:row; flex-wrap:wrap; margin-top:15px; height:300px; width:100%; border:1px solid #AAAAAA; overflow-y:scroll; overflow-x:hidden;">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="loading">
+        <img src="img/misc/logo.png" />
+        <div class="ship-load"></div>
+    </div>
+
+    <div id="main-container" style="display:none;">
+        <div id="top-bar">
+            <div id="status-bar">
+                <div id="form-stats">
+                    <div id="form-drop" sel="0">
+                        <img id="sel-form-drop" src="img/misc/form-0.png" />
+                        <div class="form-drop-content">
+                            <div class="form-option sel-option" opt="0" title="Neutral"><img src="img/misc/form-0.png" width="64" height="64"><div class="option-desc">None</div></div>
+                            <div class="form-option sel-option" opt="1" title="+15% FP & Torp, -10% EVA"><img src="img/misc/form-1.png" width="64" height="64"><div class="option-desc">Straight line</div></div>
+                            <div class="form-option sel-option" opt="2" title="+30% EVA, -5% FP & Torp"><img src="img/misc/form-2.png" width="64" height="64"><div class="option-desc">Double line</div></div>
+                            <div class="form-option sel-option" opt="3" title="+20% AA"><img src="img/misc/form-3.png" width="64" height="64"><div class="option-desc">Diamond</div></div>
+                        </div>
+                    </div>
+                    <div id="ammo-drop" sel="neutral">
+                        <img id="sel-ammo-drop" src="img/misc/ammo-neutral.png" />
+                        <div class="ammo-drop-content">
+                            <div class="ammo-option sel-option" opt="neutral"><img src="img/misc/ammo-neutral.png" width="64" height="64"><div class="option-desc">Neutral</div></div>
+                            <div class="ammo-option sel-option" opt="plenty"><img src="img/misc/ammo-plenty.png" width="64" height="64"><div class="option-desc">Plenty (+10% damage)</div></div>
+                            <div class="ammo-option sel-option" opt="empty"><img src="img/misc/ammo-empty.png" width="64" height="64"><div class="option-desc">Empty (-50% damage)</div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="ship-container">
+                   <div class="ship" slot="1">
+                        <div class="ttip" data-slot="1" data-type="backline" data-toggle="modal" data-target="#modalPickShip">
+                            <div class="ttiplv">100</div>
+                        </div>
+                        <div class="ship-lower-bar">
+                            <div class="skill-show" data-slot="1"></div>
+                        </div>
+                    </div>
+                    <div class="ship" slot="2">
+                        <div class="ttip flagship" data-slot="2" data-type="backline" data-toggle="modal" data-target="#modalPickShip">
+                            <div class="ttiplv">100</div>
+                        </div>
+                        <div class="ship-lower-bar">
+                            <div class="skill-show" data-slot="2"></div>
+                        </div>
+                    </div>
+                    <div class="ship" slot="3">
+                        <div class="ttip" data-slot="3" data-type="backline" data-toggle="modal" data-target="#modalPickShip">
+                            <div class="ttiplv">100</div>
+                        </div>
+                        <div class="ship-lower-bar">
+                            <div class="skill-show" data-slot="3"></div>
+                        </div>
+                    </div>
+                    <div class="ship" slot="4">
+                        <div class="ttip" data-slot="4" data-type="frontline" data-toggle="modal" data-target="#modalPickShip">
+                            <div class="ttiplv">100</div>
+                        </div>
+                        <div class="ship-lower-bar">
+                            <div class="skill-show" data-slot="4"></div>
+                        </div>
+                    </div>
+                    <div class="ship" slot="5">
+                        <div class="ttip" data-slot="5" data-type="frontline" data-toggle="modal" data-target="#modalPickShip">
+                            <div class="ttiplv">100</div>
+                        </div>
+                        <div class="ship-lower-bar">
+                            <div class="skill-show" data-slot="5"></div>
+                        </div>
+                    </div>
+                    <div class="ship" slot="6">
+                        <div class="ttip" data-slot="6" data-type="frontline" data-toggle="modal" data-target="#modalPickShip">
+                            <div class="ttiplv">100</div>
+                        </div>
+                        <div class="ship-lower-bar">
+                            <div class="skill-show" data-slot="6"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="form-status">
+                    <div class="fattr" title="Firepower">
+                        <img class="attricon attrfp" title="Firepower" src="img/attr/fp.png" />
+                        <div class="attrval">0</div>
+                    </div>
+                    <div class="fattr" title="Torpedo">
+                        <img class="attricon" title="Torpedo" src="img/attr/torp.png" />
+                        <div class="attrval">0</div>
+                    </div>
+                    <div class="fattr" title="Anti-air">
+                        <img class="attricon" title="Anti-air" src="img/attr/aa.png" />
+                        <div class="attrval">0</div>
+                    </div>
+                    <div class="fattr" title="Air Power">
+                        <img class="attricon" title="Air Power" src="img/attr/air.png" />
+                        <div class="attrval">0</div>
+                    </div>
+                    <div class="fattr" title="Cost">
+                        <img class="attricon" title="Cost" src="img/attr/cost.png" />
+                        <div class="attrval">0</div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div id="menu-bar">
+            <div id="top-menu">
+                <div class="menu-option menu-shipInfo">Equip</div>
+                <div class="menu-option menu-combat">Combat</div>
+                <div class="menu-option">Ambushes</div>
+                <div class="menu-option">AA Calculator</div>
+                <div class="menu-option"></div>
+                <div class="menu-option"></div>
+            </div>
+        </div>
+
+        <div id="main-frame">
+            <div id="main-cont">
+
+                <div id="help-panel"></div>
+                <div id="shipInfo-panel" style="display:none;">
+                    <div class="shipInfo-topStatus">
+                        <div class="dropdown ship-sel-drop" sel="-1">
+                            <button id="ship-drop" class="btn btn-warning dropdown-toggle" data-flip="false" style="padding:0; text-align:left; background:#EEEEEE; border:1px solid #AAAAAA" type="button" id="ss" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div style="display:inline-block; width:90%; height:100%">
+                                    <div id="sel-ship-drop" sel="-1"><div>Select ship</div></div>
+                                </div>
+                            </button>
+                            <div class="dropdown-menu ship-drop-cont" style="padding:0;" aria-labelledby="dropdownMenuButton"></div>
+                        </div>
+
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="checkCombatStats" name="checkCombat">
+                            <label class="custom-control-label unselectable" for="checkCombatStats">View combat stats (formation buffs, skills, ...)</label>
+                        </div>
+                        
+                    </div>
+
+                    <div class="shipInfo-main" style="display:none;">
+                        <div class="shipInfo-stats">
+                            <div class="shipInfo-base">
+                                <div class="shipInfo-baseTop">
+                                    <div class="ship-stars-cont"><img id="ship-stars" src="img/stars-e/ssr-6e.png" /></div>                             
+                                    <div><img id="ship-type" title="" src="img/ship-types/8.png" /></div>
+                                    <span id="ship-type-name">Light Aircraft Carrier</span>                                   
+                                </div>    
+                                
+                                <div style="display:flex; flex-direction:row; align-items:center;">
+                                    <div style="font-weight:bold;">Level: <input id="inLvl" type="number" max="120" min="1" /></div>
+                                    <div id="divNormal" style="font-weight:bold; margin-left:20px; margin-right:20px;">Limit Break: <select id="inLB"></select><br /></div>
+                                    <div id="divPrio" style="font-weight:bold;margin-left:20px;margin-right:20px;width: 140px;">
+                                        <div style="display: flex;">
+                                            <div style="width: 95px;">Dev. Lv:</div>
+                                            <input id="inDev" type="number" style="width: 50px;">
+                                        </div>
+                                        <div style="margin-top: 4px; display: flex;">
+                                            <div style="width: 95px;">Blueprints:</div>
+                                            <input id="inBps" type="number" style="width: 50px;" />
+                                        </div>
+                                    </div>
+
+                                    <div class="dropdown affection-drop" sel="0">
+                                        <button class="btn btn-warning dropdown-toggle" data-flip="false" style="background:#EEEEEE; border:1px solid #AAAAAA" type="button" id="ss" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <img id="sel-affection-drop" src="img/affection/affection-0.png" />
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item affection-option sel-option" href="#" opt="0">
+                                                <img src="img/affection/affection-0.png" width="45" height="45"><div class="option-desc">Normal</div>
+                                            </a>
+                                            <a class="dropdown-item affection-option sel-option" href="#" opt="1">
+                                                <img src="img/affection/affection-1.png" width="45" height="45"><div class="option-desc">Friendly<br />(+1% stats)</div>
+                                            </a>
+                                            <a class="dropdown-item affection-option sel-option" href="#" opt="2">
+                                                <img src="img/affection/affection-2.png" width="45" height="45"><div class="option-desc">Like<br />(+3% stats)</div>
+                                            </a>
+                                            <a class="dropdown-item affection-option sel-option" href="#" opt="3">
+                                                <img src="img/affection/affection-3.png" width="45" height="45"><div class="option-desc">Love<br />(+6% stats)</div>
+                                            </a>
+                                            <a class="dropdown-item affection-option sel-option" href="#" opt="4">
+                                                <img src="img/affection/affection-4.png" width="45" height="45"><div class="option-desc">Oath<br />(+9% stats)</div>
+                                            </a>
+                                            <a class="dropdown-item affection-option sel-option" href="#" opt="5">
+                                                <img src="img/affection/affection-5.png" width="45" height="45"><div class="option-desc">Oath Max<br />(+12% stats)</div>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+
+
+                                <hr class="my-2">
+                                <div class="power-cont">
+                                    <span>Combat Power: </span><div id="ship-cp" style="margin-right:26px;">4123</div>
+                                    <span class="airstrike">Airstrike: </span><div class="airstrike" id="ship-airstrike">18.42s</div>
+                                </div>
+                            </div>
+                            <div class="shipInfo-statsPanel">
+                                <div class="fattr" title="Health">
+                                    <img class="attricon attrfp" title="Health" src="img/attr/hp.png" />
+                                    <div class="attrval">6636<div style="margin:0; display:inline-block; color:lawngreen;">+1000</div></div>
+                                </div>
+                                <div class="fattr" title="Armor">
+                                    <img class="attricon attrfp" title="Armor" src="img/attr/armor.png" />
+                                    <div class="attrval">Medium</div>
+                                </div>
+                                <div class="fattr" title="Reload">
+                                    <img class="attricon attrfp" title="Reload" src="img/attr/reload.png" />
+                                    <div class="attrval">154</div>
+                                </div>
+                                <div class="fattr" title="Firepower">
+                                    <img class="attricon attrfp" title="Firepower" src="img/attr/fp.png" />
+                                    <div class="attrval">350<div style="display:inline-block; color:lawngreen;">+105</div></div>
+                                </div>
+                                <div class="fattr" title="Torpedo">
+                                    <img class="attricon" title="Torpedo" src="img/attr/torp.png" />
+                                    <div class="attrval">0</div>
+                                </div>
+                                <div class="fattr" title="Evasion">
+                                    <img class="attricon" title="Evasion" src="img/attr/eva.png" />
+                                    <div class="attrval">33</div>
+                                </div>
+                                <div class="fattr" title="Anti-air">
+                                    <img class="attricon" title="Anti-air" src="img/attr/aa.png" />
+                                    <div class="attrval">264<div style="display:inline-block; color:lawngreen;">+45</div></div>
+                                </div>
+                                <div class="fattr" title="Air Power">
+                                    <img class="attricon" title="Air Power" src="img/attr/air.png" />
+                                    <div class="attrval">0</div>
+                                </div>
+                                <div class="fattr" title="Cost">
+                                    <img class="attricon" title="Cost" src="img/attr/cost.png" />
+                                    <div class="attrval">14</div>
+                                </div>
+                                <div class="fattr" title="Anti-Sub">
+                                    <img class="attricon" title="Anti-Sub" src="img/attr/asw.png" />
+                                    <div class="attrval">0</div>
+                                </div>
+                                <div class="fattr" title="Hit">
+                                    <div style="margin-left:5px; color:white;">Hit</div>
+                                    <div class="attrval">0</div>
+                                </div>
+                                <div class="fattr" title="Luck">
+                                    <div style="margin-left:5px; color:white;">Luck</div>
+                                    <div class="attrval">0</div>
+                                </div>
+                                <div class="fattr" title="Speed">
+                                    <div style="margin-left:5px; color:white;">Speed</div>
+                                    <div class="attrval" style="margin-right:5px;">0</div>
+                                </div>
+                            </div>
+
+                            
+
+                            <div class="tab-content barrages">
+
+                                <ul class="nav nav-tabs" id="barr-tabs" role="tablist" style="margin-top:0;">
+                                    <li class="nav-item barr-nav">
+                                        <a style="padding:2px; padding-left:10px; padding-right:10px;" class="nav-link active" id="home-tab" data-toggle="tab" href="#skill" role="tab" aria-controls="home" aria-selected="true">Skill</a>
+                                    </li>
+                                    <li class="nav-item barr-nav">
+                                        <a style="padding:2px; padding-left:10px; padding-right:10px;" class="nav-link" id="profile-tab" data-toggle="tab" href="#gun" role="tab" aria-controls="profile" aria-selected="false">Gun</a>
+                                    </li>
+                                </ul>
+
+                                <div class="tab-pane show active barrage" role="tabpanel" id="skill">
+                                    <div class="barrage-icon"><div class="bskill-icon"></div></div>
+                                    
+                                    <div class="barrage-base">
+                                        <div style="display:flex; width:100%; align-content: space-between; flex-wrap: nowrap">
+                                            <select class="barrage-upg-sel">
+                                                <option>1</option>
+                                                <option>2</option>
+                                                <option>3</option>
+                                                <option>4</option>
+                                                <option>5</option>
+                                                <option>6</option>
+                                                <option>10</option>
+                                            </select>
+                                            <div class="barrage-name">Triple 155mm</div>
+                                            <span class="fa fa-info-circle clickable-icon" aria-hidden="true"></span>
+                                        </div>
+                                        <div class="barrage-info">
+                                            <div class="barrage-weap">
+                                                <div style="display:flex; flex-direction:row; margin-top:4px; align-items:flex-end;">
+                                                    <div>
+                                                        <div class="eattr" title="">
+                                                            <div style="margin-left:5px; color:white;">Dmg</div>
+                                                            <div class="eattrval" style="margin-right:5px;">156 x 60</div>
+                                                        </div>
+                                                        <div class="eattr" style="justify-content:center;" title="">
+                                                            <div class="eattrval" style="width:auto; margin-right:0px;">120%</div>
+                                                            <img class="attricon" title="Cost" src="img/attr/fp.png" />                                                           
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="barr-props" style="display:flex; flex-direction:column;">
+                                                        <img width="25" src="img/at-2.png" />
+                                                    </div>
+
+                                                    <div style="height:100%; margin-left:10px;">
+                                                        <table class="mods-tbl" cellspacing="5">
+                                                            <tbody class="pre-mount-tbl-body" style="text-align:center;">
+                                                                <tr><td></td><td>Qty</td><td>L</td><td>M</td><td>H</td></tr>
+                                                                <tr><td>Bullet0</td><td>16</td><td>90%</td><td>120%</td><td>70%</td></tr>
+                                                                <tr><td>Bullet1</td><td>44</td><td>120%</td><td>100%</td><td>80%</td></tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="barrage-weap">
+                                                <div style="display:flex; flex-direction:row; margin-top:4px; align-items:flex-end;">
+                                                    <div>
+                                                        <div class="eattr" title="">
+                                                            <div style="margin-left:5px; color:white;">Dmg</div>
+                                                            <div class="eattrval" style="margin-right:5px;">156 x 60</div>
+                                                        </div>
+                                                        <div class="eattr" style="justify-content:center;" title="Scaling">
+                                                            <div class="eattrval" style="width:auto; margin-right:0px;">100%</div>
+                                                            <img class="attricon" title="" src="img/attr/torp.png" />
+                                                        </div>
+                                                    </div>
+  
+                                                    <div style="display:flex; flex-direction:column;">
+                                                        <img width="25" src="img/at-2.png" />
+                                                    </div>
+
+                                                    <div style="height:100%; margin-left:10px;">
+                                                        <table class="mods-tbl" cellspacing="5">
+                                                            <tbody class="pre-mount-tbl-body" style="text-align:center; margin-left:0">
+                                                                <tr><td></td><td>Qty</td><td>L</td><td>M</td><td>H</td></tr>
+                                                                <tr><td>Bullet0</td><td>16</td><td>90%</td><td>120%</td><td>70%</td></tr>
+                                                            
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane barrage" role="tabpanel" id="gun">
+                                    <div class="barrage-icon"><div class="bskill-icon"></div></div>
+
+                                    <div class="barrage-base">
+                                        <div style="display:flex; width:100%; align-content: space-between; flex-wrap: nowrap">
+                                            <select class="barrage-upg-sel"></select>
+                                            <div class="barrage-name">Triple 155mm</div>
+                                            <span class="fa fa-info-circle clickable-icon" aria-hidden="true"></span>
+                                        </div>
+                                        <div class="barrage-info">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+    
+                        </div>
+                        
+                        
+                        <div id="eq-slots-cont-1">
+                            <div class="equip-slot" slot="1">
+                                <div class="equip-slot-top">
+                                    <div class="equip-slot-name">
+                                        <span class="fa fa-question-circle clickable-icon" data-toggle="modal" data-target="#modalFixedSecondary" aria-hidden="true"></span> BB Main Gun
+                                    </div>
+                                    <div class="equip-eff">
+                                        <div class="equip-eff-label">Efficiency</div><div class="slot-eff">180%</div>
+                                    </div>
+                                </div>
+                                <div class="eq-slot">
+                                    <div class="eq-slot-base">
+                                        <div class="eqttip" data-slot="1" data-type="3" data-shiptype="8" data-toggle="modal" data-target="#modalPickEquip">
+                                            <img class='imgstars' src='img/stars/6.png' />
+                                        </div>
+                                        <div class="eq-slot-base-sec">
+                                            <div style="display:flex; align-content: space-between; flex-wrap: nowrap">
+                                                <select class="eq-upg-sel">
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                    <option>6</option>
+                                                    <option>10</option>
+                                                </select>
+                                                <div class="eq-name-marquee"><div class="eq-name">Triple 155mm</div></div>
+                                                <span class="fa fa-info-circle clickable-icon" data-toggle="modal" data-target="#modalEquipInfo" aria-hidden="true"></span>
+                                            </div>
+                                            <div style="display:flex; flex-direction:row; margin-top:4px; align-items:flex-end;">
+                                                <table class="pre-mount-tbl">
+                                                    <tbody class="pre-mount-tbl-body">
+                                                        <tr><td width="70%">Mounts</td><td class="mount-val">2</td></tr>
+                                                        <tr><td>Preload</td><td class="preload-val">2</td></tr>
+                                                    </tbody>
+                                                </table>
+
+                                                <!-- <div class="eq-mount-desc">Mount #: 2</div> -->
+                                                <div class="eq-ammo-prop">
+                                                    <img src="img/at-2.png" />
+                                                </div>                              
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="eq-desc-cont">
+                                        <div class="eattr" title="">
+                                            <div style="margin-left:5px; color:white;">Dmg</div>
+                                            <div class="eattrval" style="margin-right:5px;">18 x 6</div>
+                                        </div>
+                                        <div class="eattr" title="">
+                                            <div style="margin-left:5px; color:white;">Rof</div>
+                                            <div class="eattrval" style="margin-right:5px;">4.64 s</div>
+                                        </div>
+                                        <div class="eattr" title="">
+                                            <img class="attricon" title="Cost" src="img/attr/fp.png" />
+                                            <div class="eattrval" style="margin-right:5px;">45</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="equip-slot" slot="2">
+                                <div class="equip-slot-top">
+                                    <div class="equip-slot-name">
+                                        <span class="fa fa-question-circle clickable-icon" data-toggle="modal" data-target="#modalFixedSecondary" aria-hidden="true"></span> BB Main Gun
+                                    </div>
+                                    <div class="equip-eff">
+                                        <div class="equip-eff-label">Efficiency</div><div class="slot-eff">180%</div>
+                                    </div>
+                                </div>
+                                <div class="eq-slot">
+                                    <div class="eq-slot-base">
+                                        <div class="eqttip" data-slot="2" data-type="3" data-shiptype="8" data-toggle="modal" data-target="#modalPickEquip">
+                                            <img class='imgstars' src='img/stars/6.png' />
+                                        </div>
+                                        <div class="eq-slot-base-sec">
+                                            <div style="display:flex; align-content: space-between; flex-wrap: nowrap">
+                                                <select class="eq-upg-sel">
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                    <option>6</option>
+                                                    <option>10</option>
+                                                </select>
+                                                <div class="eq-name-marquee"><div class="eq-name">Triple 155mm</div></div>
+                                                <span class="fa fa-info-circle clickable-icon" data-toggle="modal" data-target="#modalEquipInfo" aria-hidden="true"></span>
+                                            </div>
+                                            <div style="display:flex; flex-direction:row; margin-top:6px; align-items:flex-end;">
+                                                <table class="pre-mount-tbl">
+                                                    <tbody class="pre-mount-tbl-body">
+                                                        <tr><td width="70%">Mounts</td><td class="mount-val">2</td></tr>
+                                                        <tr><td>Preload</td><td class="preload-val">2</td></tr>
+                                                    </tbody>
+                                                </table>
+
+                                                <div class="eq-ammo-prop">
+                                                    <img src="img/at-2.png" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="eq-desc-cont">
+                                        <div class="eattr" title="">
+                                            <div style="margin-left:5px; color:white;">Dmg</div>
+                                            <div class="eattrval" style="margin-right:5px;">18 x 6</div>
+                                        </div>
+                                        <div class="eattr" title="">
+                                            <div style="margin-left:5px; color:white;">Rof</div>
+                                            <div class="eattrval" style="margin-right:5px;">4.64 s</div>
+                                        </div>
+                                        <div class="eattr" title="">
+                                            <img class="attricon" title="Cost" src="img/attr/fp.png" />
+                                            <div class="eattrval" style="margin-right:5px;">45</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="equip-slot" slot="3">
+                                <div class="equip-slot-top">
+                                    <div class="equip-slot-name">
+                                        <span class="fa fa-question-circle clickable-icon" data-toggle="modal" data-target="#modalFixedSecondary" aria-hidden="true"></span> BB Main Gun
+                                    </div>
+                                    <div class="equip-eff">
+                                        <div class="equip-eff-label">Efficiency</div><div class="slot-eff">180%</div>
+                                    </div>
+                                </div>
+                                <div class="eq-slot">
+                                    <div class="eq-slot-base">
+                                        <div class="eqttip" data-slot="3" data-type="3" data-shiptype="8" data-toggle="modal" data-target="#modalPickEquip">
+                                            <img class='imgstars' src='img/stars/6.png' />
+                                        </div>
+                                        <div class="eq-slot-base-sec">
+                                            <div style="display:flex; align-content: space-between; flex-wrap: nowrap">
+                                                <select class="eq-upg-sel">
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                    <option>6</option>
+                                                    <option>10</option>
+                                                </select>
+                                                <div class="eq-name-marquee"><div class="eq-name">Triple 155mm</div></div>
+                                                <span class="fa fa-info-circle clickable-icon" data-toggle="modal" data-target="#modalEquipInfo" aria-hidden="true"></span>
+                                            </div>
+                                            <div style="display:flex; flex-direction:row; margin-top:6px; align-items:flex-end;">
+                                                <table class="pre-mount-tbl">
+                                                    <tbody class="pre-mount-tbl-body">
+                                                        <tr><td width="70%">Mounts</td><td class="mount-val">2</td></tr>
+                                                        <tr><td>Preload</td><td class="preload-val">2</td></tr>
+                                                    </tbody>
+                                                </table>
+
+                                                <div class="eq-ammo-prop">
+                                                    <img src="img/at-2.png" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="eq-desc-cont">
+                                        <div class="eattr" title="">
+                                            <div style="margin-left:5px; color:white;">Dmg</div>
+                                            <div class="eattrval" style="margin-right:5px;">18 x 6</div>
+                                        </div>
+                                        <div class="eattr" title="">
+                                            <div style="margin-left:5px; color:white;">Rof</div>
+                                            <div class="eattrval" style="margin-right:5px;">4.64 s</div>
+                                        </div>
+                                        <div class="eattr" title="">
+                                            <img class="attricon" title="Cost" src="img/attr/fp.png" />
+                                            <div class="eattrval" style="margin-right:5px;">45</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="eq-slots-cont-2">
+                            <div class="equip-slot" slot="4">
+                                <div class="equip-slot-top">
+                                    <div class="equip-slot-name">
+                                        <span class="fa fa-question-circle clickable-icon" data-toggle="modal" data-target="#modalFixedSecondary" aria-hidden="true"></span> BB Main Gun
+                                    </div>
+                                    <div class="equip-eff">
+                                        <div class="equip-eff-label">Efficiency</div><div class="slot-eff">180%</div>
+                                    </div>
+                                </div>
+                                <div class="eq-slot">
+                                    <div class="eq-slot-base">
+                                        <div class="eqttip" data-slot="4" data-type="3" data-shiptype="8" data-toggle="modal" data-target="#modalPickEquip">
+                                            <img class='imgstars' src='img/stars/6.png' />
+                                        </div>
+                                        <div class="eq-slot-base-sec">
+                                            <div style="display:flex; align-content: space-between; flex-wrap: nowrap">
+                                                <select class="eq-upg-sel">
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                    <option>6</option>
+                                                    <option>10</option>
+                                                </select>
+                                                <div class="eq-name-marquee"><div class="eq-name">Triple 155mm</div></div>
+                                                <span class="fa fa-info-circle clickable-icon" data-toggle="modal" data-target="#modalEquipInfo" aria-hidden="true"></span>
+                                            </div>
+                                            <div style="display:flex; flex-direction:row; margin-top:6px; align-items:flex-end;">
+                                                <table class="pre-mount-tbl">
+                                                    <tbody class="pre-mount-tbl-body">
+                                                        <tr><td width="70%">Mounts</td><td class="mount-val">2</td></tr>
+                                                        <tr><td>Preload</td><td class="preload-val">2</td></tr>
+                                                    </tbody>
+                                                </table>
+
+                                                <div class="eq-ammo-prop">
+                                                    <img src="img/at-2.png" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="eq-desc-cont">
+                                        <div class="eattr" title="">
+                                            <div style="margin-left:5px; color:white;">Dmg</div>
+                                            <div class="eattrval" style="margin-right:5px;">18 x 6</div>
+                                        </div>
+                                        <div class="eattr" title="">
+                                            <div style="margin-left:5px; color:white;">Rof</div>
+                                            <div class="eattrval" style="margin-right:5px;">4.64 s</div>
+                                        </div>
+                                        <div class="eattr" title="">
+                                            <img class="attricon" title="Cost" src="img/attr/fp.png" />
+                                            <div class="eattrval" style="margin-right:5px;">45</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="equip-slot" slot="5">
+                                <div class="equip-slot-top">
+                                    <div class="equip-slot-name">
+                                        <span class="fa fa-question-circle clickable-icon" data-toggle="modal" data-target="#modalFixedSecondary" aria-hidden="true"></span> BB Main Gun
+                                    </div>
+                                    <div class="equip-eff">
+                                        <div class="equip-eff-label">Efficiency</div><div class="slot-eff">180%</div>
+                                    </div>
+                                </div>
+                                <div class="eq-slot">
+                                    <div class="eq-slot-base">
+                                        <div class="eqttip" data-slot="5" data-type="3" data-shiptype="8" data-toggle="modal" data-target="#modalPickEquip">
+                                            <img class='imgstars' src='img/stars/6.png' />
+                                        </div>
+                                        <div class="eq-slot-base-sec">
+                                            <div style="display:flex; align-content: space-between; flex-wrap: nowrap">
+                                                <select class="eq-upg-sel">
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                    <option>6</option>
+                                                    <option>10</option>
+                                                </select>
+                                                <div class="eq-name-marquee"><div class="eq-name">Triple 155mm</div></div>
+                                                <span class="fa fa-info-circle clickable-icon" data-toggle="modal" data-target="#modalEquipInfo" aria-hidden="true"></span>
+                                            </div>
+                                            <div style="display:flex; flex-direction:row; margin-top:6px; align-items:flex-end;">
+                                                <table class="pre-mount-tbl">
+                                                    <tbody class="pre-mount-tbl-body">
+                                                        <tr><td width="70%">Mounts</td><td class="mount-val">2</td></tr>
+                                                        <tr><td>Preload</td><td class="preload-val">2</td></tr>
+                                                    </tbody>
+                                                </table>
+
+                                                <div class="eq-ammo-prop">
+                                                    <img src="img/at-2.png" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="eq-desc-cont">
+                                        <div class="eattr" title="">
+                                            <div style="margin-left:5px; color:white;">Dmg</div>
+                                            <div class="eattrval" style="margin-right:5px;">18 x 6</div>
+                                        </div>
+                                        <div class="eattr" title="">
+                                            <div style="margin-left:5px; color:white;">Rof</div>
+                                            <div class="eattrval" style="margin-right:5px;">4.64 s</div>
+                                        </div>
+                                        <div class="eattr" title="">
+                                            <img class="attricon" title="Cost" src="img/attr/fp.png" />
+                                            <div class="eattrval" style="margin-right:5px;">45</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="equip-slot" slot="6">
+                                <div class="equip-slot-top">
+                                    <div class="equip-slot-name">
+                                        <span class="fa fa-question-circle clickable-icon" data-toggle="modal" data-target="#modalFixedSecondary" aria-hidden="true"></span> Fixed Gun
+                                    </div>
+                                    <div class="equip-eff">
+                                        <div class="equip-eff-label">Efficiency</div><div class="slot-eff">180%</div>
+                                    </div>
+                                </div>
+                                <div class="eq-slot">
+                                    <div class="eq-slot-base">
+                                        <div class="eqttip" data-slot="1" data-type="3" data-shiptype="8">
+                                            <img class='imgstars' src='img/stars/6.png' />
+                                        </div>
+                                        <div class="eq-slot-base-sec">
+                                            <div style="display:flex; align-content: space-between; flex-wrap: nowrap">
+                                                <select class="eq-upg-sel">
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                    <option>6</option>
+                                                    <option>10</option>
+                                                </select>
+                                                <div class="eq-name-marquee"><div class="eq-name">Triple 155mm</div></div>
+                                                <span class="fa fa-info-circle clickable-icon" data-toggle="modal" data-target="#modalEquipInfo" aria-hidden="true"></span>
+                                            </div>
+                                            <div style="display:flex; flex-direction:row; margin-top:6px; align-items:flex-end;">
+                                                <table class="pre-mount-tbl">
+                                                    <tbody class="pre-mount-tbl-body">
+                                                        <tr><td width="70%">Mounts</td><td class="mount-val">2</td></tr>
+                                                        <tr><td>Preload</td><td class="preload-val">2</td></tr>
+                                                    </tbody>
+                                                </table>
+
+                                                <div class="eq-ammo-prop">
+                                                    <img src="img/at-2.png" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="eq-desc-cont">
+                                        <div class="eattr" title="">
+                                            <div style="margin-left:5px; color:white;">Dmg</div>
+                                            <div class="eattrval" style="margin-right:5px;">18 x 6</div>
+                                        </div>
+                                        <div class="eattr" title="">
+                                            <div style="margin-left:5px; color:white;">Rof</div>
+                                            <div class="eattrval" style="margin-right:5px;">4.64 s</div>
+                                        </div>
+                                        <div class="eattr" title="">
+                                            <img class="attricon" title="Cost" src="img/attr/fp.png" />
+                                            <div class="eattrval" style="margin-right:5px;">45</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        
+                    </div>
+                </div>
+                <div id="combat-panel" style="display:none;">
+                    <div class="shipInfo-topStatus">
+                        <div class="dropdown cship-sel-drop" sel="-1">
+                            <button id="cship-drop" class="btn btn-warning dropdown-toggle" data-flip="false" style="padding:0; text-align:left; background:#EEEEEE; border:1px solid #AAAAAA" type="button" id="ss1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div style="display:inline-block; width:90%; height:100%">
+                                    <div id="csel-ship-drop" sel="-1"><div>Select ship</div></div>
+                                </div>
+                            </button>
+                            <div class="dropdown-menu cship-drop-cont" style="padding:0;" aria-labelledby="dropdownMenuButton"></div>
+                        </div>
+
+                        <div class="dropdown equip-sel-drop" sel="-1">
+                            <button id="equip-drop" class="btn btn-warning dropdown-toggle" data-flip="false" style="padding:0; text-align:left; background:#EEEEEE; border:1px solid #AAAAAA" type="button" id="ss2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div style="display:inline-block; width:90%; height:100%">
+                                    <div id="sel-equip-drop" sel="-1"><div>Select equip</div></div>
+                                </div>
+                            </button>
+                            <div class="dropdown-menu equip-drop-cont" style="padding:0;" aria-labelledby="dropdownMenuButton"></div>
+                        </div>
+                    </div>
+                    <div class="shipCombat-main"> <!--  style="display:none;" -->
+                        <div id="skillDisplay" >
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
